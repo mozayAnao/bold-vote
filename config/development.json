@@ -1,0 +1,5 @@
+{
+    "name": "Bold-Vote-Dev",
+    "dbConnectionString": "mongodb://localhost/bold-vote",
+    "jwtPrivateKey": "" 
+}

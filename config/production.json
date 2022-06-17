@@ -1,0 +1,5 @@
+{
+    "name": "Bold-Vote-Prod",
+    "dbConnectionString-Prod": "",
+    "jwtPrivateKey": "" 
+}
