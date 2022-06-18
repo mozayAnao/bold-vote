@@ -34,6 +34,7 @@ const electionsRouter = require('./routes/election');
 const positionsRouter = require('./routes/positions');
 const aspirantsRouter = require('./routes/aspitants');
 const votersRouter = require('./routes/voters');
+const authRouter = require('./routes/auth');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,6 +52,7 @@ app.use('/elections', electionsRouter);
 app.use('/positions', positionsRouter);
 app.use('/aspirants', aspirantsRouter);
 app.use('/voters', votersRouter);
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

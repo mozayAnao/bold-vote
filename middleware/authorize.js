@@ -15,6 +15,11 @@ const authorize = {
 
     res.status(403).send('Access denied');
   },
+  voter: (req, res, next) => {
+    if (req.user.verified === true && req.user.voted === false) return next();
+
+    res.status(403).send('Access denied');
+  },
 };
 
 module.exports = authorize;

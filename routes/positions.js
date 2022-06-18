@@ -6,7 +6,7 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const { Position, validatePosition } = require('../models/Position');
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   const position = await Position.find();
 
   res.send(position);

@@ -6,8 +6,19 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const { Aspirant, validateAspirant } = require('../models/aspirant');
 
-router.get('/', async (req, res) => {
-  const aspirant = await Aspirant.find();
+router.get('/', auth, async (req, res) => {
+  const aspirants = await Aspirant.find();
+
+  res.send(aspirants);
+});
+
+router.get('/:id', auth, async (req, res) => {
+  const aspirant = await Aspirant.findById(req.params.id);
+
+  if (!aspirant)
+    return res
+      .status(404)
+      .send('The Aspirant with the given ID does not exist');
 
   res.send(aspirant);
 });
@@ -45,7 +56,7 @@ router.put(
   }
 );
 
-router.put('/vote/:id', async (req, res) => {
+router.put('/vote/:id', [auth, authorized.voter], async (req, res) => {
   let aspirant = await Aspirant.findById(req.params.id);
 
   if (!aspirant) return res.status(400).send('Invalid Request');
@@ -54,7 +65,7 @@ router.put('/vote/:id', async (req, res) => {
 
   aspirant = aspirant.save();
 
-  res.send(aspirant);
+  res.redirect(`/voters/voted/${req.user._id}`);
 });
 
 router.delete('/:id', [auth, authorized.admin], async (req, res) => {

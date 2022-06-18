@@ -19,6 +19,16 @@ router.get('/:id', auth, async (req, res) => {
   res.send(voter);
 });
 
+router.get('/voted/:id', [auth, authorized.voter], async (req, res) => {
+  let voter = await Voter.findById(req.params.id);
+
+  voter.voted = true;
+
+  voter = voter.save();
+
+  res.send(voter);
+});
+
 router.post('/', [auth, authorized.admin, validateVoter], async (req, res) => {
   let voter = await Voter.findOne({ idnumber: req.body.idnumber });
 
@@ -28,7 +38,7 @@ router.post('/', [auth, authorized.admin, validateVoter], async (req, res) => {
 
   voter = await voter.save();
 
-  res.send(token);
+  res.send(voter);
 });
 
 router.put(
@@ -46,7 +56,7 @@ router.put(
   }
 );
 
-router.put('/code/:id', [auth, authorized.admin], async (req, res) => {
+router.put('/code/:id', [auth, authorized.ecagent], async (req, res) => {
   let voter = await Voter.findById(req.params.id);
 
   if (!voter)

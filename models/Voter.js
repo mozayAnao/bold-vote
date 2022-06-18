@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 const voterSchema = new mongoose.Schema({
   lastname: {
@@ -52,6 +54,22 @@ const voterSchema = new mongoose.Schema({
     type: String,
   },
 });
+
+voterSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign(
+    {
+      _id: this._id,
+      firstname: this.firstname,
+      email: this.email,
+      phone: this.phone,
+      verified: this.verified,
+      voted: this.voted,
+    },
+    config.get('jwtPrivateKey')
+  );
+
+  return token;
+};
 
 const Voter = mongoose.model('Voter', voterSchema);
 
