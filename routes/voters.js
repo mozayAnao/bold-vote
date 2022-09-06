@@ -4,6 +4,9 @@ const auth = require('../middleware/auth');
 const authorized = require('../middleware/authorize');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const upload = multer({ dest: './public/images/voters/' });
+const fs = require('fs');
 const { Voter, validateVoter } = require('../models/Voter');
 
 /* GET voters listing. */
@@ -29,17 +32,28 @@ router.get('/voted/:id', [auth, authorized.voter], async (req, res) => {
   res.send(voter);
 });
 
-router.post('/', [auth, authorized.admin, validateVoter], async (req, res) => {
-  let voter = await Voter.findOne({ idnumber: req.body.idnumber });
+router.post(
+  '/',
+  [validateVoter, upload.single('voter_photo')],
+  async (req, res) => {
+    let voter = await Voter.findOne({ idnumber: req.body.idnumber });
 
-  if (voter) return res.status(400).send('voter already exists');
+    if (voter) return res.status(400).send('voter already exists');
 
-  voter = new Voter(req.body);
+    const photo = req.file;
+    const newPath = `public/images/voters/${photo.originalname}`;
+    const path = `/images/voters/${photo.originalname}`;
+    fs.rename(photo.path, newPath, (err) => {
+      if (err) console.log('error:' + err);
+      req.body.photo = path;
+    });
+    voter = new Voter(req.body);
 
-  voter = await voter.save();
+    voter = await voter.save();
 
-  res.send(voter);
-});
+    res.send(voter);
+  }
+);
 
 router.put(
   '/:id',

@@ -21,6 +21,10 @@ const aspirantSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  photo: {
+    type: String,
+    required: true,
+  },
 });
 
 const Aspirant = mongoose.model('Aspirant', aspirantSchema);
@@ -76,6 +80,8 @@ const validateAspirant = async (req, res, next) => {
       }),
 
     ballotNumber: Joi.number().required(),
+
+    photo: Joi.string().required(),
   });
 
   try {

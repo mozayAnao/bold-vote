@@ -3,9 +3,56 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <div id="voter">
+      <input type="text" placeholder="lastname" id="lastname" name="lastname" >
+      <input type="text" placeholder="firstname" id="firstname" name="firstname" >
+      <input type="text" placeholder="othername" id="othername" name="othername" >
+      <input type="text" placeholder="idnumber" id="idnumber" name="idnumber" >
+      <input type="text" placeholder="phone" id="phone" name="phone" >
+      <input type="email" placeholder="email" id="email" name="email">
+      <input type="file" placeholder="photo" id="photo" name="photo" >
+
+      <input id="sub" type="button" value="submit" onclick="submitForm()" >
+    </div>
+    <!-- <script>
+    // import axios from 'axios';
+    function submitForm() {
+        const lastname = document.getElementById('lastname').value;
+        const firstname = document.getElementById('firstname').value;
+        const othername = document.getElementById('othername').value;
+        const idnumber = document.getElementById('idnumber').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const photo = document.getElementById('photo').value;
+
+        $.post({
+          url: '/voters',
+          data: {
+            lastname: lastname,
+            firstname: firstname,
+            othername: othername,
+            idnumber: idnumber,
+            phone: phone,
+            email: email,
+            photo: photo,
+          },
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+</script> -->
+    <script src="/javascripts/index.js"></script>
   </body>
 </html>

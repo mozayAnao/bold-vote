@@ -4,6 +4,9 @@ const auth = require('../middleware/auth');
 const authorized = require('../middleware/authorize');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const upload = multer({ dest: './public/images/aspirants/' });
+const fs = require('fs');
 const { Aspirant, validateAspirant } = require('../models/aspirant');
 
 router.get('/', auth, async (req, res) => {
@@ -25,12 +28,19 @@ router.get('/:id', auth, async (req, res) => {
 
 router.post(
   '/',
-  [auth, authorized.admin, validateAspirant],
+  [auth, authorized.admin, validateAspirant, upload.single('aspirant_photo')],
   async (req, res) => {
     let aspirant = await Aspirant.findOne({ name: req.body.name });
 
     if (aspirant) return res.status(400).send('aspirant already exists');
 
+    const photo = req.file;
+    const newPath = `public/images/aspirants/${photo.originalname}`;
+    const path = `/images/aspirants/${photo.originalname}`;
+    fs.rename(photo.path, newPath, (err) => {
+      if (err) console.log('error:' + err);
+      req.body.photo = path;
+    });
     aspirant = new Aspirant(req.body);
 
     aspirant = await aspirant.save();
