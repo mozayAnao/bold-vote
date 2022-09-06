@@ -45,6 +45,18 @@ router.put(
   }
 );
 
+router.put('/skipped/:id', [auth, authorized.voter], async (req, res) => {
+  let position = await Position.findById(req.params.id);
+
+  if (!position) return res.status(400).send('Invalid Request');
+
+  position.skipped += 1;
+
+  position = position.save();
+
+  res.send(position);
+});
+
 router.delete('/:id', [auth, authorized.admin], async (req, res) => {
   const position = await Position.findByIdAndRemove(req.params.id);
 

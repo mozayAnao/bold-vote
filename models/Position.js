@@ -13,6 +13,10 @@ const positionSchema = new mongoose.Schema({
     enum: ['single', 'multiple'],
     required: true,
   },
+  skipped: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Position = mongoose.model('Position', positionSchema);
